@@ -180,12 +180,12 @@ func receiveImage(msg *message.MixMessage) *message.Reply {
 		cpf.HttpProfile.Endpoint = "ocr.tencentcloudapi.com"
 		client, _ := ocr.NewClient(credential, "ap-beijing", cpf)
 
-		request := ocr.NewRecognizeHealthCodeOCRRequest()
+		request := ocr.NewGeneralBasicOCRRequest()
 		picURL := msg.PicURL
 		fmt.Println("picURL: ", picURL)
 		request.ImageUrl = &picURL
 
-		response, err := client.RecognizeHealthCodeOCR(request)
+		response, err := client.GeneralBasicOCR(request)
 		if _, ok := err.(*errors.TencentCloudSDKError); ok {
 			fmt.Printf("An API error has returned: %s", err)
 			return "", fmt.Errorf("an API error has returned: %w", err)
@@ -193,7 +193,11 @@ func receiveImage(msg *message.MixMessage) *message.Reply {
 		if err != nil {
 			return "", fmt.Errorf("request api error: %w", err)
 		}
-		return response.ToJsonString(), nil
+		bodyText := "检测到以下文本:\n\n"
+		for _, t := range response.Response.TextDetections {
+			bodyText += *t.DetectedText + "\n"
+		}
+		return bodyText, nil
 	}()
 	text := message.NewText("")
 	if err != nil {
