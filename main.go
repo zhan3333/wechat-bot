@@ -77,6 +77,17 @@ type funcMapType map[message.MsgType]func(msg *message.MixMessage) *message.Repl
 var msgFuncMap = funcMapType{
 	message.MsgTypeText:  receiveText,
 	message.MsgTypeImage: receiveImage,
+	message.MsgTypeEvent: receiveEvent,
+}
+
+func receiveEvent(msg *message.MixMessage) *message.Reply {
+	if msg.Event == message.EventSubscribe {
+		return &message.Reply{
+			MsgType: message.MsgTypeText,
+			MsgData: message.NewText(defaultMsg),
+		}
+	}
+	return nil
 }
 
 // 接收微信消息并做出响应
@@ -96,6 +107,8 @@ var textFuncMap = map[string]func(msg string) *message.Reply{
 }
 
 var defaultMsg = `这是默认的回复: 
+
+- 发送图片可以识别图片中的文本
 `
 
 func receiveText(msg *message.MixMessage) *message.Reply {
