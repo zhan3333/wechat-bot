@@ -1,0 +1,13 @@
+{
+  "addr": ":9002",
+  "wechat": {
+    "app_id": "",
+    "app_secret": "",
+    "token": "",
+    "encoding_aes_key": ""
+  },
+  "tencent": {
+    "secret_id": "",
+    "secret_key": ""
+  }
+}
