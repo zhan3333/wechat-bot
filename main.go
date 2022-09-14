@@ -43,9 +43,9 @@ func main() {
 	}
 	oa = wc.GetOfficialAccount(cfg)
 
-	app.GET("/debug", func(c *gin.Context) {
+	app.GET("", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"msg": "wechat-bot run ok",
+			"msg": "wechat-bot is running",
 		})
 	})
 	app.Any("/api/wechat", func(c *gin.Context) {
